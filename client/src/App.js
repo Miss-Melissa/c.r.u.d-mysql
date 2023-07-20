@@ -1,5 +1,5 @@
 import './App.css';
-import AddProductPage from './pages/AddProductPage';
+import AddProductPage from './pages/addproductpage/addproductpage';
 
 function App() {
   return (
