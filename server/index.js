@@ -28,6 +28,26 @@ app.get('/api/get', (req, res) => {
 });
 
 
+  app.get('/api/get/:id', (req, res) => {
+    const id = req.params.id;
+
+    const sqlId = 'SELECT * FROM products WHERE id = ?';
+
+   db.query(sqlId, [id], (err, result) => {
+      if (err) {
+        console.error('Error executing MySQL query:', err);
+        res.status(500).json({ error: 'Error fetching product from MySQL' });
+      } else {
+        if (result.length > 0) {
+          res.json(result[0]);
+        } else {
+          res.status(404).json({ error: 'Product not found' });
+        }
+      }
+    });
+  });
+
+
 app.post('/api/insert', (req, res) => {
 
     const prodctName = req.body.productName
@@ -52,6 +72,25 @@ app.delete('/api/delete/:id', (req, res) => {
        if (err) console.log(err);
     });
 });
+
+
+app.put('/api/update/:id', (req, res) => {
+    const id = req.params.id;
+    const { productName, productPrice, productDescription } = req.body;
+
+    const sqlUpdate = `UPDATE products SET productName = ?, productPrice = ?, productDescription = ? WHERE id = ?`;
+
+    db.query(sqlUpdate, [productName, productPrice, productDescription, id], (err, result) => {
+      if (err) {
+        console.error('Error updating product:', err);
+        res.status(500).json({ error: 'Error updating product.' });
+      } else {
+        res.json({ message: 'Product updated successfully.' });
+      }
+    });
+
+  });
+  
 
 
 
