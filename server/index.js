@@ -50,14 +50,21 @@ app.get('/api/get', (req, res) => {
 
 app.post('/api/insert', (req, res) => {
 
-    const prodctName = req.body.productName
+    const productName = req.body.productName
     const productPrice = req.body.productPrice
     const productDescription = req.body.productDescription
 
     const sqlInsert = "INSERT INTO products (productName, productPrice, productDescription) VALUES (?, ?, ?)"
 
-    db.query(sqlInsert, [prodctName, productPrice, productDescription], (err, result) => {
-        console.log(result)
+    db.query(sqlInsert, [productName, productPrice, productDescription], (err, result) => {
+      if (err) {
+          console.error('Error inserting product:', err);
+          res.status(500).json({ success: false, message: 'Product addition failed' });
+      } else {
+          console.log('Product added successfully:', result);
+          res.json({ success: true, message: 'Product added successfully' });
+      
+      }
     });
 
 });
@@ -69,26 +76,32 @@ app.delete('/api/delete/:id', (req, res) => {
     const sqlDelete = "DELETE FROM products WHERE id = ?";
 
     db.query(sqlDelete, id, (err, result) => {
-       if (err) console.log(err);
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: 'Delete failed' }); // Send an error response
+    } else {
+        res.status(200).send({ message: 'Delete successful' }); // Send a success response
+    }
     });
 });
 
 
-app.put('/api/update/:id', (req, res) => {
+  
+  app.put('/api/update/:id', (req, res) => {
     const id = req.params.id;
     const { productName, productPrice, productDescription } = req.body;
-
+  
     const sqlUpdate = `UPDATE products SET productName = ?, productPrice = ?, productDescription = ? WHERE id = ?`;
-
+  
     db.query(sqlUpdate, [productName, productPrice, productDescription, id], (err, result) => {
       if (err) {
         console.error('Error updating product:', err);
-        res.status(500).json({ error: 'Error updating product.' });
+        res.status(500).json({ updated: false });
       } else {
-        res.json({ message: 'Product updated successfully.' });
+        console.log('Product updated');
+        res.json({ updated: true });
       }
     });
-
   });
   
 

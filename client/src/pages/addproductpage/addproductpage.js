@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import Products from '../../components/products/products';
-import '../../styles/addproductpage/addproductpage.css'
+import '../../styles/addproductpage/addproductpage.css';
+import AddProducts from '../../components/addproducts/addproducts';
 
-function AddProductPage({ setProductList, productList }) {
+
+
+function AddProductPage() {
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState('');
     const [productDescription, setProductDescription] = useState('');
@@ -14,13 +16,22 @@ function AddProductPage({ setProductList, productList }) {
             productName: productName,
             productPrice: productPrice,
             productDescription: productDescription
-        }).then(() => {
-            setProductList([...productList, {
-                productName: productName,
-                productPrice: productPrice,
-                productDescription: productDescription
-            }
-            ]);
+        }).then((res) => {
+            if (res.data.success) {
+                console.log('Product added successfully:', res.data);
+                // Reset form fields
+                window.location.reload();
+
+                setProductName('');
+                setProductPrice('');
+                setProductDescription('');
+              } else {
+                console.log('Product not updated');
+              }
+      
+        })
+        .catch((error) => {
+            console.error('Error adding product:', error);
         });
     }
 
@@ -40,9 +51,11 @@ function AddProductPage({ setProductList, productList }) {
                 <input type='text' name='productDescription' onChange={(e) => { setProductDescription(e.target.value) }} />
 
                 <button onClick={addProduct}>Add Product</button>
+
+                
             </div>
 
-            <Products />
+            <AddProducts />
 
         </div>
     );
