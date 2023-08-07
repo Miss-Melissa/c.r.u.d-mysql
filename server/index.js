@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const mysql = require('mysql');
+
 
 const app = express();
-const mysql = require('mysql');
 
 app.use(cors());
 app.use(express.json())
@@ -15,6 +17,16 @@ const db = mysql.createPool({
     password: 'password',
     database: 'shop-db'
 });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'uploads/'); // Specify the upload directory
+  },
+  filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname); // Generate a unique filename
+  },
+});
+const upload = multer({ storage: storage });
 
 
 app.get('/api/get', (req, res) => {
@@ -50,13 +62,15 @@ app.get('/api/get', (req, res) => {
 
 app.post('/api/insert', (req, res) => {
 
-    const productName = req.body.productName
-    const productPrice = req.body.productPrice
-    const productDescription = req.body.productDescription
+    const productName = req.body.productName;
+    const productPrice = req.body.productPrice;
+    const productDescription = req.body.productDescription;
+    const productImage = req.file;
 
-    const sqlInsert = "INSERT INTO products (productName, productPrice, productDescription) VALUES (?, ?, ?)"
 
-    db.query(sqlInsert, [productName, productPrice, productDescription], (err, result) => {
+    const sqlInsert = "INSERT INTO products (productName, productPrice, productDescription, productImage) VALUES (?, ?, ?, ?)"
+
+    db.query(sqlInsert, [productName, productPrice, productDescription, productImage], (err, result) => {
       if (err) {
           console.error('Error inserting product:', err);
           res.status(500).json({ success: false, message: 'Product addition failed' });

@@ -7,7 +7,6 @@ function UpdateProductPage() {
   const [productPrice, setProductPrice] = useState('');
   const [productDescription, setProductDescription] = useState('');
 
-
   const { id } = useParams();
   console.log({ id })
 

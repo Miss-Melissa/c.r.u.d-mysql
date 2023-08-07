@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import AddedProductList from '../addedproductlist/addedproductList';
 
-function AddProducts() {
+function AddedProducts() {
     const [productList, setProductList] = useState([]);
+
 
     useEffect(() => {
         Axios.get('http://localhost:3001/api/get').then((response) => {
@@ -13,7 +14,6 @@ function AddProducts() {
     }, []);
 
 
-
     return (
         <div>
             <AddedProductList productList={productList} />
@@ -21,4 +21,4 @@ function AddProducts() {
     );
 }
 
-export default AddProducts;
+export default AddedProducts;

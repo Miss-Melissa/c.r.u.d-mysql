@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 function AddedProductList({ productList }) {
 
-
     const deleteProduct = (id) => {
         Axios.delete(`http://localhost:3001/api/delete/${id}`).then((res) => {
                 // This runs on success
@@ -26,9 +25,9 @@ function AddedProductList({ productList }) {
         <div>
             {productList.map((val) => {
                 return <div key={val.id}>
-                    <p>{val.productName}</p>
-                    <p>{val.productPrice}</p>
-                    <p>{val.productDescription}</p>
+                    <p>Product name: {val.productName}</p>
+                    <p>Product price: {val.productPrice} kr</p>
+                    <p>Product description: {val.productDescription}</p>
                     <br />
                     <Link to={"/update-product/" + val.id}><button>Update</button></Link>
                     <button onClick={() => { deleteProduct(val.id) }}>Delete</button>
@@ -36,7 +35,7 @@ function AddedProductList({ productList }) {
             })}
         </div>
     );
-
 }
+
 
 export default AddedProductList;

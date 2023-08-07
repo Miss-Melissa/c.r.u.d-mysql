@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import '../../styles/addproductpage/addproductpage.css';
-import AddProducts from '../../components/addproducts/addproducts';
-
-
+import AddedProducts from '../../components/addedproducts/addedproducts';
 
 function AddProductPage() {
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState('');
     const [productDescription, setProductDescription] = useState('');
+    const [productImage, setProductImage] = useState(null);
 
 
     const addProduct = () => {
         Axios.post('http://localhost:3001/api/insert', {
             productName: productName,
             productPrice: productPrice,
-            productDescription: productDescription
-        }).then((res) => {
-            if (res.data.success) {
-                console.log('Product added successfully:', res.data);
-                // Reset form fields
-                window.location.reload();
-
-                setProductName('');
-                setProductPrice('');
-                setProductDescription('');
-              } else {
-                console.log('Product not updated');
-              }
-      
+            productDescription: productDescription,
+            productImage: productImage
+        }).then((response) => {
+            console.log('Product added successfully:', response.data);
+            window.location.reload();
+            // Reset form fields
+            setProductName('');
+            setProductPrice('');
+            setProductDescription('');
+            setProductImage(null);
         })
-        .catch((error) => {
-            console.error('Error adding product:', error);
-        });
+            .catch((error) => {
+                console.error('Error adding product:', error);
+            });
     }
+
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0];
+        setProductImage(selectedImage);
+    };
 
 
     return (
@@ -50,13 +50,15 @@ function AddProductPage() {
                 <label>Product Description</label>
                 <input type='text' name='productDescription' onChange={(e) => { setProductDescription(e.target.value) }} />
 
+                <label>Product Image</label>
+                <input type="file" name='productImage' accept="image/*" onChange={handleImageChange} />
+
                 <button onClick={addProduct}>Add Product</button>
 
-                
+
             </div>
 
-            <AddProducts />
-
+            <AddedProducts />
         </div>
     );
 }
