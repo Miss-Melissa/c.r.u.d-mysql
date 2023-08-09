@@ -2,7 +2,6 @@ import React from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
 
-
 function AddedProductList({ productList }) {
 
     const deleteProduct = (id) => {
@@ -28,6 +27,7 @@ function AddedProductList({ productList }) {
                     <p>Product name: {val.productName}</p>
                     <p>Product price: {val.productPrice} kr</p>
                     <p>Product description: {val.productDescription}</p>
+                    <img src={`http://localhost:3001/uploads/${val.productImage}`} alt={val.productName} />
                     <br />
                     <Link to={"/update-product/" + val.id}><button>Update</button></Link>
                     <button onClick={() => { deleteProduct(val.id) }}>Delete</button>

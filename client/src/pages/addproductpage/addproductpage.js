@@ -9,38 +9,60 @@ function AddProductPage() {
     const [productDescription, setProductDescription] = useState('');
     const [productImage, setProductImage] = useState(null);
 
-
+    
     const addProduct = () => {
-        Axios.post('http://localhost:3001/api/insert', {
+  
+        const formData = new FormData();
+
+        formData.append('productName', productName);
+        formData.append('productPrice', productPrice);
+        formData.append('productDescription', productDescription);
+        formData.append('productImage', productImage);
+
+        console.log('Data being sent:', {
             productName: productName,
             productPrice: productPrice,
             productDescription: productDescription,
             productImage: productImage
-        }).then((response) => {
-            console.log('Product added successfully:', response.data);
-            window.location.reload();
-            // Reset form fields
-            setProductName('');
-            setProductPrice('');
-            setProductDescription('');
-            setProductImage(null);
+        });
+
+        Axios.post('http://localhost:3001/api/insert', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         })
-            .catch((error) => {
-                console.error('Error adding product:', error);
-            });
+        .then((res) => {
+            console.log(res)
+
+            if (res.status === 201) {
+                console.log('Product added successfully');
+            } else {
+                console.log('Product not added:', res.data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error adding product:', error);
+        });
+
+
+
     }
 
-    const handleImageChange = (event) => {
-        const selectedImage = event.target.files[0];
-        setProductImage(selectedImage);
-    };
+
+
+     
+
+    
+
+
+          
 
 
     return (
 
         <div className='addProductPage'>
 
-            <div className='Form'>
+<form encType="multipart/form-data">
                 <label>Product Name</label>
                 <input type='text' name='productName' onChange={(e) => { setProductName(e.target.value) }} />
 
@@ -51,12 +73,12 @@ function AddProductPage() {
                 <input type='text' name='productDescription' onChange={(e) => { setProductDescription(e.target.value) }} />
 
                 <label>Product Image</label>
-                <input type="file" name='productImage' accept="image/*" onChange={handleImageChange} />
+                <input type="file" name='productImage' accept="image/*" onChange={(e) => { setProductImage(e.target.files[0]) }} />
 
                 <button onClick={addProduct}>Add Product</button>
 
 
-            </div>
+            </form>
 
             <AddedProducts />
         </div>

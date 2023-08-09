@@ -3,13 +3,18 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const mysql = require('mysql');
+const router = require("./routes/router");
 
+
+require('./db/conn');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(router)
+
 
 const db = mysql.createPool({
     host: 'localhost',
@@ -18,15 +23,30 @@ const db = mysql.createPool({
     database: 'shop-db'
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Specify the upload directory
+var imgconfig = multer.diskStorage({
+  destination: (req, file, callback) => {
+      callback(null, "uploads");
   },
-  filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname); // Generate a unique filename
-  },
+  filename: (req, file, callback) => {
+      callback(null, `image-${Date.now()}.${file.originalname}`)
+  }
 });
-const upload = multer({ storage: storage });
+
+
+// img filter
+const isImage = (req, file, callback) => {
+  if (file.mimetype.startsWith("image")) {
+      callback(null, true)
+  } else {
+      callback(null, Error("only image is allowd"))
+  }
+}
+
+var upload = multer({
+  storage: imgconfig,
+  fileFilter: isImage
+})
+
 
 
 app.get('/api/get', (req, res) => {
@@ -59,29 +79,6 @@ app.get('/api/get', (req, res) => {
     });
   });
 
-
-app.post('/api/insert', (req, res) => {
-
-    const productName = req.body.productName;
-    const productPrice = req.body.productPrice;
-    const productDescription = req.body.productDescription;
-    const productImage = req.file;
-
-
-    const sqlInsert = "INSERT INTO products (productName, productPrice, productDescription, productImage) VALUES (?, ?, ?, ?)"
-
-    db.query(sqlInsert, [productName, productPrice, productDescription, productImage], (err, result) => {
-      if (err) {
-          console.error('Error inserting product:', err);
-          res.status(500).json({ success: false, message: 'Product addition failed' });
-      } else {
-          console.log('Product added successfully:', result);
-          res.json({ success: true, message: 'Product added successfully' });
-      
-      }
-    });
-
-});
 
 
 app.delete('/api/delete/:id', (req, res) => {
