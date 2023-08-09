@@ -21,4 +21,5 @@ function AddedProducts() {
     );
 }
 
+
 export default AddedProducts;

@@ -9,9 +9,9 @@ function AddProductPage() {
     const [productDescription, setProductDescription] = useState('');
     const [productImage, setProductImage] = useState(null);
 
-    
+
     const addProduct = () => {
-  
+
         const formData = new FormData();
 
         formData.append('productName', productName);
@@ -31,18 +31,19 @@ function AddProductPage() {
                 'Content-Type': 'multipart/form-data',
             },
         })
-        .then((res) => {
-            console.log(res)
+            .then((res) => {
+                console.log(res)
 
-            if (res.status === 201) {
-                console.log('Product added successfully');
-            } else {
-                console.log('Product not added:', res.data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error adding product:', error);
-        });
+                if (res.status === 201) {
+                    window.location.reload(); // Reload the window if the delete was successful
+                    console.log('Product added successfully');
+                } else {
+                    console.log('Product not added:', res.data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding product:', error);
+            });
 
 
 
@@ -50,19 +51,19 @@ function AddProductPage() {
 
 
 
-     
-
-    
 
 
-          
+
+
+
+
 
 
     return (
 
         <div className='addProductPage'>
 
-<form encType="multipart/form-data">
+            <div className='Form'>
                 <label>Product Name</label>
                 <input type='text' name='productName' onChange={(e) => { setProductName(e.target.value) }} />
 
@@ -76,11 +77,12 @@ function AddProductPage() {
                 <input type="file" name='productImage' accept="image/*" onChange={(e) => { setProductImage(e.target.files[0]) }} />
 
                 <button onClick={addProduct}>Add Product</button>
+            </div>
 
+            <div>
+                <AddedProducts />
+            </div>
 
-            </form>
-
-            <AddedProducts />
         </div>
     );
 }
