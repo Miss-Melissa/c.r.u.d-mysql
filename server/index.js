@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const multer = require('multer');
 const mysql = require('mysql');
 const router = require("./routes/router");
 
@@ -22,30 +21,6 @@ const db = mysql.createPool({
     password: 'password',
     database: 'shop-db'
 });
-
-var imgconfig = multer.diskStorage({
-  destination: (req, file, callback) => {
-      callback(null, "uploads");
-  },
-  filename: (req, file, callback) => {
-      callback(null, `image-${Date.now()}.${file.originalname}`)
-  }
-});
-
-
-// img filter
-const isImage = (req, file, callback) => {
-  if (file.mimetype.startsWith("image")) {
-      callback(null, true)
-  } else {
-      callback(null, Error("only image is allowd"))
-  }
-}
-
-var upload = multer({
-  storage: imgconfig,
-  fileFilter: isImage
-})
 
 
 
@@ -98,22 +73,34 @@ app.delete('/api/delete/:id', (req, res) => {
 
 
   
-  app.put('/api/update/:id', (req, res) => {
-    const id = req.params.id;
-    const { productName, productPrice, productDescription } = req.body;
-  
-    const sqlUpdate = `UPDATE products SET productName = ?, productPrice = ?, productDescription = ? WHERE id = ?`;
-  
-    db.query(sqlUpdate, [productName, productPrice, productDescription, id], (err, result) => {
-      if (err) {
-        console.error('Error updating product:', err);
-        res.status(500).json({ updated: false });
-      } else {
-        console.log('Product updated');
-        res.json({ updated: true });
-      }
-    });
+app.put('/api/update/:id', (req, res) => {
+  const id = req.params.id;
+  const { productName, productPrice, productDescription } = req.body;
+  const productImage = req.file ? req.file.filename : null;  // Use req.file instead of req.body.productImage
+
+  console.log('productName:', productName);
+  console.log('productPrice:', productPrice);
+  console.log('productDescription:', productDescription);
+
+  const sqlUpdate = 'UPDATE products SET productName = ?, productPrice = ?, productDescription = ?, productImage = ? WHERE id = ?';
+  const values = [productName, productPrice, productDescription, productImage, id];
+
+  db.query(sqlUpdate, values, (err, result) => {
+    if (err) {
+      console.error('Error updating product:', err);
+      res.status(500).json({ updated: false });
+    } else {
+      console.log('Product updated successfully:', result);
+      res.status(200).json({ updated: true });
+    }
   });
+});
+
+
+
+
+
+
   
 
 

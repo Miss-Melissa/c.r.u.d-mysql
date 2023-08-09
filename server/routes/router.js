@@ -26,6 +26,9 @@ const upload = multer({
 router.use('/uploads', express.static('uploads'));
 
 
+router.use(upload.single('productImage'));
+
+
 router.post('/api/insert', upload.single('productImage'), (req, res) => {
     try {
         console.log('Received data:', req.body);
@@ -43,7 +46,6 @@ router.post('/api/insert', upload.single('productImage'), (req, res) => {
         const sqlInsert = 'INSERT INTO products (productName, productPrice, productDescription, productImage) VALUES (?, ?, ?, ?)';
         const values = [productName, productPrice, productDescription, productImage];
 
-
         db.query(sqlInsert, values, (err, result) => {
             if (err) {
                 console.error('Error inserting product:', err);
@@ -60,5 +62,45 @@ router.post('/api/insert', upload.single('productImage'), (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+
+  
+router.put('/api/update/:id', (req, res) => {
+    const id = req.params.id;
+    const { productName, productPrice, productDescription } = req.body;
+    const productImage = req.file ? req.file.filename : null;
+  
+    console.log('productName:', productName);
+    console.log('productPrice:', productPrice);
+    console.log('productDescription:', productDescription);
+    console.log('productImage:', productImage);
+  
+    // Check if productName is undefined or an empty string
+    if (productName === undefined || productName.trim() === '') {
+      return res.status(400).json({ error: 'productName is required' });
+    }
+  
+    // Check if productImage is null, if it is, don't update the productImage field
+    const sqlUpdate = productImage
+      ? 'UPDATE products SET productName = ?, productPrice = ?, productDescription = ?, productImage = ? WHERE id = ?'
+      : 'UPDATE products SET productName = ?, productPrice = ?, productDescription = ? WHERE id = ?';
+  
+    const values = productImage
+      ? [productName, productPrice, productDescription, productImage, id]
+      : [productName, productPrice, productDescription, id];
+  
+    db.query(sqlUpdate, values, (err, result) => {
+      if (err) {
+        console.error('Error updating product:', err);
+        res.status(500).json({ updated: false });
+      } else {
+        console.log('Product updated successfully:', result);
+        res.status(200).json({ updated: true });
+      }
+    });
+  });
+  
+
+  
 
 module.exports = router;
