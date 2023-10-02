@@ -35,21 +35,17 @@ function UpdateProductPage() {
   const updateProduct = async (e) => {
     e.preventDefault();
 
-    console.log('Sending data:', productName, productPrice, productDescription, productImage);
-
     const formData = new FormData();
 
     formData.append('productName', productName);
     formData.append('productPrice', productPrice);
     formData.append('productDescription', productDescription);
 
-    // Upload the new image first
     if (newProductImage) {
       formData.append('productImage', newProductImage);
-
       try {
         const res = await Axios.put(`http://localhost:3001/api/update/${id}`, formData);
-        console.log('Image uploaded successfully:', res.data.fileName);
+        console.log('Image uploaded successfully:');
 
         if (res.data.updated) {
           console.log('Product updated successfully');
@@ -57,12 +53,8 @@ function UpdateProductPage() {
         } else {
           console.log('Product not updated');
         }
-
-        // Update the productImage state with the new image filename
-        setProductImage(res.data.fileName);
       } catch (error) {
         console.error('Error uploading image:', error);
-        return;
       }
     }
 

@@ -26,6 +26,7 @@ function AddProductPage() {
             productImage: productImage
         });
 
+
         Axios.post('http://localhost:3001/api/insert', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -42,25 +43,13 @@ function AddProductPage() {
                 }
             })
             .catch((error) => {
-                console.error('Error adding product:', error);
+                console.log('Error adding product:', error);
             });
-
-
-
     }
 
 
 
-
-
-
-
-
-
-
-
     return (
-
         <div className='addProductPage'>
 
             <div className='Form'>
@@ -77,6 +66,8 @@ function AddProductPage() {
                 <input type="file" name='productImage' accept="image/*" onChange={(e) => { setProductImage(e.target.files[0]) }} />
 
                 <button onClick={addProduct}>Add Product</button>
+
+
             </div>
 
             <div>
