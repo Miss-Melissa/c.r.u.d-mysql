@@ -1,6 +1,5 @@
-/* Header.css */
 .header {
-    background-color: #333;
+    background-color: black;
     color: #fff;
     padding: 10px;
     display: flex;
@@ -11,6 +10,12 @@
 .logo h1 {
     margin: 0;
     font-size: 24px;
+}
+
+
+.logo-a {
+    text-decoration: none;
+    color: white;
 }
 
 .toggle-button {
@@ -50,7 +55,7 @@
         position: absolute;
         top: 50px;
         right: 0;
-        background-color: #333;
+        background-color: black;
         width: 100%;
         text-align: center;
         display: none;
