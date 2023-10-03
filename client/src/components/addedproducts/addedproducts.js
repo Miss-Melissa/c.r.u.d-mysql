@@ -9,7 +9,6 @@ function AddedProducts() {
     useEffect(() => {
         Axios.get('http://localhost:3001/api/get').then((response) => {
             setProductList(response.data);
-            console.log(response.data)
         });
     }, []);
 

@@ -22,15 +22,15 @@ function AddedProductList({ productList }) {
 
     return (
         <div>
-            {productList.map((val) => {
-                return <div key={val.id}>
-                    <img src={`http://localhost:3001/uploads/${val.productImage}`} alt={val.productName} height={250} width={250} />
-                    <p>Product name: {val.productName}</p>
-                    <p>Product price: {val.productPrice} kr</p>
-                    <p>Product description: {val.productDescription}</p>
+            {productList.map((product) => {
+                return <div key={product.id}>
+                    <img src={`http://localhost:3001/uploads/${product.productImage}`} alt={product.productName} height={250} width={250} />
+                    <p>Product name: {product.productName}</p>
+                    <p>Product price: {product.productPrice} kr</p>
+                    <p>Product description: {product.productDescription}</p>
                     <br />
-                    <Link to={"/update-product/" + val.id}><button>Update</button></Link>
-                    <button onClick={() => { deleteProduct(val.id) }}>Delete</button>
+                    <Link to={"/update-product/" + product.id}><button>Update</button></Link>
+                    <button onClick={() => { deleteProduct(product.id) }}>Delete</button>
                 </div>
             })}
         </div>
