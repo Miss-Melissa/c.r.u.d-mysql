@@ -18,6 +18,7 @@
     color: white;
 }
 
+
 .toggle-button {
     background: none;
     border: none;
@@ -27,6 +28,8 @@
     display: none;
     /* Hide the button by default */
 }
+
+
 
 .navbar ul {
     list-style: none;

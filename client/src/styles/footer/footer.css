@@ -2,8 +2,7 @@
     background-color: black;
     color: #fff;
     padding: 20px 0;
-    bottom: 0;
-  }
+    }
 
 @media (max-width: 768px) {
     .footer {

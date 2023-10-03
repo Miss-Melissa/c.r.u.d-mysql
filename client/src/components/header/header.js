@@ -16,7 +16,7 @@ function Header() {
         <a className="logo-a" href="/"><h1>My App</h1></a>
       </div>
       <button className={`toggle-button ${isOpen ? 'open' : ''}`} onClick={toggleNavbar}>
-        &#9776;
+        {isOpen ? '✕' : '☰'} {/* Change button content based on isOpen */}
       </button>
       <nav className={`navbar ${isOpen ? 'open' : ''}`}>
         <ul>

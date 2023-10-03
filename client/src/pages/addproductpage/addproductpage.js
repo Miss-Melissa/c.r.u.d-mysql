@@ -51,6 +51,7 @@ function AddProductPage() {
 
     return (
         <div className='addProductPage'>
+            <h1>Add Products</h1>
 
             <div className='Form'>
                 <label>Product Name</label>
