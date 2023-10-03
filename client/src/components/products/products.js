@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import Axios from 'axios';
 import { Link } from 'react-router-dom';
 
 
-function Products({products}) {
+function Products() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    Axios.get('http://localhost:3001/api/get')
+      .then(response => {
+        setProducts(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+
 
   return (
     <div>
+      {loading ? (
+        <p>Loading ...</p>
+      ) : (
         <ul>
        {products.map(product => (
           <li key={product.id}>
@@ -21,6 +41,7 @@ function Products({products}) {
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 }
