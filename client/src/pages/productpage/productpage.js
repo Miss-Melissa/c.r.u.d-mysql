@@ -3,7 +3,7 @@ import Product from '../../components/product/product';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-function ProductPage() {
+function ProductPage({ addToCart }) {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ function ProductPage() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <Product product={product} />
+        <Product product={product} addToCart={addToCart} />
       )}
     </div>
   );
