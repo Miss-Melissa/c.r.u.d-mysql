@@ -1,12 +1,12 @@
 import React from 'react';
 import Products from '../../components/products/products';
 
-function ProductsPage() {
+function ProductsPage({ addToCart }) {
   return (
     <div>
       <h2>Products</h2>
       <br />
-      <Products />
+      <Products addToCart={addToCart} />
     </div>
   );
 }

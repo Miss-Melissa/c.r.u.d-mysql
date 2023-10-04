@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import '../../styles/header/header.css';
 
 
-
-function Header() {
+function Header({cartItemCount}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNavbar = () => {
@@ -23,6 +22,7 @@ function Header() {
           <li><a href="/">Home</a></li>
           <li><a href="/products">Products</a></li>
           <li><a href="/add-product">Add Product</a></li>
+          <li><a href="/cart">Cart ({cartItemCount})</a></li>
         </ul>
       </nav>
     </header>

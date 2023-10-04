@@ -3,9 +3,11 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 
 
-function Products() {
+function Products({ addToCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  
 
 
   useEffect(() => {
@@ -38,6 +40,8 @@ function Products() {
            <strong>{product.productPrice}</strong>
            <br />
            <strong>{product.productDescription}</strong>
+           <br />
+           <button onClick={() => addToCart(product)}>Add to Cart</button>
           </li>
         ))}
       </ul>
