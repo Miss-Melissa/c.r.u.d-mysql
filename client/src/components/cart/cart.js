@@ -7,7 +7,7 @@ function getCartDataFromLocalStorage() {
   return cartData;
 }
 
-function Cart({ removeFromCart }) {
+function Cart({ removeFromCart, incrementItem, decrementItem }) {
   const [cartItems, setCartItems] = useState([]);
 
   // Use useEffect to load cart data from local storage
@@ -22,7 +22,12 @@ function Cart({ removeFromCart }) {
       <h2>Cart</h2>
       <ul>
         {cartItems.map((item) => (
-          <CartItem key={item.id} item={item} removeFromCart={removeFromCart} />
+          <CartItem 
+          key={item.id} 
+          item={item} 
+          removeFromCart={removeFromCart}     
+          incrementItem={incrementItem}
+          decrementItem={decrementItem}/>
         ))}
       </ul>
     </div>

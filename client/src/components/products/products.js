@@ -7,8 +7,6 @@ function Products({ addToCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
-
 
   useEffect(() => {
     Axios.get('http://localhost:3001/api/get')

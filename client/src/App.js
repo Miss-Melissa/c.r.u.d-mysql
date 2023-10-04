@@ -35,6 +35,30 @@ function App() {
     }
   };
 
+    const incrementItem = (product) => {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+    };
+  
+    const decrementItem = (product) => {
+      const existingItem = cartItems.find((item) => item.id === product.id);
+  
+      if (existingItem && existingItem.quantity > 1) {
+        setCartItems(
+          cartItems.map((item) =>
+            item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
+          )
+        );
+      } else {
+        // Remove the item from the cart if its quantity is 1 or less
+        setCartItems(cartItems.filter((item) => item.id !== product.id));
+      }
+    };
+    
+
   const removeFromCart = (product) => {
     setCartItems(cartItems.filter((item) => item.id !== product.id));
   };
@@ -50,7 +74,7 @@ function App() {
             <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
             <Route path="/add-product" element={<AddProductPage />} />
             <Route path="/update-product/:id" element={<UpdateProductPage />} />
-            <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} />} />
+            <Route path="/cart" element={<Cart cartItems={cartItems} incrementItem={incrementItem} decrementItem={decrementItem} removeFromCart={removeFromCart} />} />
           </Routes>
         </BrowserRouter>
       </main>
