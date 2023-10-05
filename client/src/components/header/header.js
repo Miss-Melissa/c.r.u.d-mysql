@@ -1,30 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../styles/header/header.css';
+import { useCart } from '../cartcontext/cartcontext'; // Import the useCart hook
 
-function Header({ cartItemCount }) {
+function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState();
+  const { cartItems } = useCart(); // Access cartItems from the context
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
-  // Use useEffect to update the cartItemCount based on local storage
-  useEffect(() => {
-    // Retrieve the JSON string from localStorage
-    const jsonString = localStorage.getItem('cartItems'); // Replace 'yourKey' with the actual key you are using
-  
-    // Parse the JSON string to an array of objects
-    const savedCartItems = JSON.parse(jsonString);
-  
-    // Calculate the total quantity by summing up the 'quantity' property of all items
-    const totalQuantity = savedCartItems.reduce((total, item) => total + item.quantity, 0);
-  
-    // Set the total quantity in cartCount state
-    setCartCount(totalQuantity);
-  }, []);  
-  
-  
+  // Calculate the cartCount based on the cartItems
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <header className="header">
