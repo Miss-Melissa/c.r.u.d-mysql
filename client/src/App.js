@@ -11,8 +11,6 @@ import ProductPage from './pages/productpage/productpage';
 import Cart from './components/cart/cart';
 
 function App() {
-
-
   return (
     <div className="App">
       <Header />

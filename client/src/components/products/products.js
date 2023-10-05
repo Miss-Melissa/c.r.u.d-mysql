@@ -3,8 +3,10 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../components/cartcontext/cartcontext'; // Import the useCart hook
 
+// ... other imports ...
+
 function Products() {
-  const { cartItems, addToCart, incrementItem, decrementItem } = useCart(); // Use the useCart hook to access cart-related functions
+  const { cartItems, addToCart, incrementItem, decrementItem, removeFromCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +21,16 @@ function Products() {
         setLoading(false);
       });
   }, []);
+
+  const handleDecrement = (product) => {
+    const cartItem = cartItems.find((item) => item.id === product.id);
+    if (cartItem && cartItem.quantity === 1) {
+      // If the item quantity becomes 1, remove it from the cart
+      removeFromCart(product);
+    } else {
+      decrementItem(product);
+    }
+  };
 
   return (
     <div>
@@ -48,9 +60,13 @@ function Products() {
                 <strong>{product.productDescription}</strong>
                 <br />
                 <button onClick={() => addToCart(product)}>Add to Cart</button>
-                <button onClick={() => decrementItem(product)}>-</button>
-                <span>{initialQuantity}</span>
-                <button onClick={() => incrementItem(product)}>+</button>
+                {initialQuantity > 0 && (
+                  <>
+                    <button onClick={() => handleDecrement(product)}>-</button>
+                    <span>{initialQuantity}</span>
+                    <button onClick={() => incrementItem(product)}>+</button>
+                  </>
+                )}
               </li>
             );
           })}

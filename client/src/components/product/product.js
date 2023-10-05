@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../../components/cartcontext/cartcontext'; // Import the useCart hook
 
 function Product({ product }) {
-  const { addToCart, incrementItem, decrementItem } = useCart(); // Use the useCart hook to access cart-related functions
+  const { addToCart, incrementItem, decrementItem, removeFromCart } = useCart(); // Use the useCart hook to access cart-related functions
   const [localQuantity, setLocalQuantity] = useState(0);
 
   // Retrieve the product data from local storage
@@ -35,6 +35,13 @@ function Product({ product }) {
     setLocalQuantity(localQuantity + 1); // Update the local quantity when adding to cart
   };
 
+  useEffect(() => {
+    // Check if the local quantity becomes 0, then remove the item from the cart
+    if (localQuantity === 0) {
+      removeFromCart(product);
+    }
+  }, [localQuantity, removeFromCart, product]);
+
   return (
     <div>
       <div>
@@ -43,9 +50,13 @@ function Product({ product }) {
         <p><strong>Description:</strong> {product.productDescription}</p>
         <p><strong>Price:</strong> {product.productPrice} kr</p>
         <button onClick={handleAddToCart}>Add to Cart</button>
-        <button onClick={handleDecrement}>-</button>
-        <span>{localQuantity}</span>
-        <button onClick={handleIncrement}>+</button>
+        {localQuantity > 0 && (
+          <>
+            <button onClick={handleDecrement}>-</button>
+            <span>{localQuantity}</span>
+            <button onClick={handleIncrement}>+</button>
+          </>
+        )}
       </div>
     </div>
   );
