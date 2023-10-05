@@ -43,22 +43,23 @@ function UpdateProductPage() {
 
     if (newProductImage) {
       formData.append('productImage', newProductImage);
-      try {
-        const res = await Axios.put(`http://localhost:3001/api/update/${id}`, formData);
-        console.log('Image uploaded successfully:');
-
-        if (res.data.updated) {
-          console.log('Product updated successfully');
-          navigate('/add-product');
-        } else {
-          console.log('Product not updated');
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
     }
 
-  };
+    try {
+      const res = await Axios.put(`http://localhost:3001/api/update/${id}`, formData);
+      console.log('Image uploaded successfully:');
+
+      if (res.data.updated) {
+        console.log('Product updated successfully');
+        navigate('/add-product');
+      } else {
+        console.log('Product not updated');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+};
+
 
   // Update previewImage when newProductImage changes
   useEffect(() => {

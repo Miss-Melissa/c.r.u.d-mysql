@@ -61,35 +61,35 @@ router.get('/api/get/:id', (req, res) => {
 
 router.use(upload.single('productImage'));
 
-    router.post('/api/insert', (req, res) => {
-        try {
-            console.log('Received data:', req.body);
-            console.log('Received file:', req.file);
-    
-            const { productName, productPrice, productDescription } = req.body;
-            const productImage = req.file;
-    
-            if (!productName || !productPrice || !productDescription || !productImage) {
-                return res.status(422).json({ message: 'Please fill all the details' });
-            }
-    
-            const sqlInsert = 'INSERT INTO products (productName, productPrice, productDescription, productImage) VALUES (?, ?, ?, ?)';
-            const values = [productName, productPrice, productDescription, productImage.filename];
-    
-            db.query(sqlInsert, values, (err, result) => {
-                if (err) {
-                    console.error('Error inserting product:', err);
-                    return res.status(500).json({ message: 'Product addition failed' });
-                } else {
-                    console.log('Product added successfully:', result);
-                    return res.status(201).json({ message: 'Product added successfully' });
-                }
-            });
-        } catch (error) {
-            console.error('Error:', error);
-            return res.status(500).json({ message: 'Server error' });
+router.post('/api/insert', (req, res) => {
+    try {
+        console.log('Received data:', req.body);
+        console.log('Received file:', req.file);
+
+        const { productName, productPrice, productDescription } = req.body;
+        const productImage = req.file;
+
+        if (!productName || !productPrice || !productDescription || !productImage) {
+            return res.status(422).json({ message: 'Please fill all the details' });
         }
-    });
+
+        const sqlInsert = 'INSERT INTO products (productName, productPrice, productDescription, productImage) VALUES (?, ?, ?, ?)';
+        const values = [productName, productPrice, productDescription, productImage.filename];
+
+        db.query(sqlInsert, values, (err, result) => {
+            if (err) {
+                console.error('Error inserting product:', err);
+                return res.status(500).json({ message: 'Product addition failed' });
+            } else {
+                console.log('Product added successfully:', result);
+                return res.status(201).json({ message: 'Product added successfully' });
+            }
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
 
 
 
@@ -133,6 +133,7 @@ router.put('/api/update/:id', (req, res) => {
     const values = productImage
         ? [productName, productPrice, productDescription, productImage, id]
         : [productName, productPrice, productDescription, id];
+
 
     db.query(sqlUpdate, values, (err, result) => {
         if (err) {
