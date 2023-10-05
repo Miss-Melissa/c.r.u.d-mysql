@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../../components/cartcontext/cartcontext'; // Import the useCart hook
+import { Link } from 'react-router-dom';
 
 function Product({ product }) {
   const { addToCart, incrementItem, decrementItem, removeFromCart } = useCart(); // Use the useCart hook to access cart-related functions
@@ -40,7 +41,8 @@ function Product({ product }) {
     if (localQuantity === 0) {
       removeFromCart(product);
     }
-  }, [localQuantity, removeFromCart, product]);
+  }, [localQuantity]); // Add localQuantity, removeFromCart, and product to the dependency array
+  
 
   return (
     <div>
@@ -57,6 +59,8 @@ function Product({ product }) {
             <button onClick={handleIncrement}>+</button>
           </>
         )}
+        <br />
+        <button><Link to="/products">Go back</Link></button>
       </div>
     </div>
   );

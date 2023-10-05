@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCart } from '../cartcontext/cartcontext';
 import CartItem from '../cartitem/cartitem';
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const { cartItems } = useCart();
@@ -14,7 +15,12 @@ function Cart() {
   return (
     <div>
       {cartItems.length === 0 ? (
+        <div>
         <p>Cart is empty</p>
+        <br />
+        <button><Link to="/products">Continue shopping</Link></button>
+        </div>
+      
       ) : (
         <div>
           <ul>
@@ -22,7 +28,11 @@ function Cart() {
               <CartItem key={item.id} item={item} />
             ))}
           </ul>
-          <p>Total Price for All Products: ${totalCartPrice.toFixed(2)}</p>
+          <p>Total Price: ${totalCartPrice.toFixed(2)}</p>
+          <br />
+          <button><Link to="/products">Continue shopping</Link></button>
+          <button><Link to="/products">Checkout</Link></button>
+
         </div>
       )}
     </div>
