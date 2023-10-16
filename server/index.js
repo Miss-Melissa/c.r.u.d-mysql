@@ -2,9 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = require("./routes/router");
-require('./db/conn');
-
-
 
 
 const app = express();
@@ -14,8 +11,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false })); 
 app.use("/uploads", express.static("./uploads"));
 app.use(router)
-
-
 
 
 app.listen(3001, () => {

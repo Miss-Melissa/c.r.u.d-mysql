@@ -26,6 +26,7 @@ const upload = multer({
 });
 
 
+// ---Product---
 
 router.get('/api/get', (req, res) => {
 
@@ -145,6 +146,9 @@ router.put('/api/update/:id', (req, res) => {
         }
     });
 });
+
+
+// --- User --- 
 
 
 

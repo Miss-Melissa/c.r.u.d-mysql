@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import '../../styles/addproductpage/addproductpage.css';
 import AddedProducts from '../../components/addedproducts/addedproducts';
+import { Link } from 'react-router-dom';
 
 function AddProductPage() {
     const [productName, setProductName] = useState('');
@@ -52,6 +53,7 @@ function AddProductPage() {
     return (
         <div className='addProductPage'>
             <h2>Add Products</h2>
+            <button><Link to="/logout">Logout</Link></button>
 
             <div className='Form'>
                 <label>Product Name</label>

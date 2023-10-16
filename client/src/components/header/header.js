@@ -25,7 +25,7 @@ function Header() {
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/products">Products</a></li>
-          <li><a href="/add-product">Add Product</a></li>
+          <li><a href="/login">Login</a></li>
           <li><a href="/cart">Cart ({cartCount})</a></li>
         </ul>
       </nav>

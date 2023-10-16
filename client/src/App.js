@@ -9,6 +9,8 @@ import HomePage from './pages/homepage/homepage';
 import ProductsPage from './pages/productspage/productspage';
 import ProductPage from './pages/productpage/productpage';
 import Cart from './components/cart/cart';
+import Register from './components/register/register';
+import Login from './components/login/login';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/add-product" element={<AddProductPage />} />
             <Route path="/update-product/:id" element={<UpdateProductPage />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </BrowserRouter>
       </main>
