@@ -2,6 +2,8 @@ const express = require('express');
 const router = new express.Router();
 const db = require('../db/conn');
 const multer = require('multer');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 
 
@@ -149,6 +151,50 @@ router.put('/api/update/:id', (req, res) => {
 
 
 // --- User --- 
+
+router.post('/api/register', (req, res) => {
+    const { email, username, password } = req.body;
+
+    if (!email) {
+        return res.json({ message: 'Email cannot be empty' });
+    }
+
+    if (!username) {
+        return res.json({ message: 'Username cannot be empty' });
+    }
+
+    if (!password) {
+        return res.json({ message: 'Password cannot be empty' });
+    }
+
+    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+        if (err) {
+            console.error('Error hashing password:', err);
+            return res.status(500).json({ message: 'Error creating user' });
+        }
+
+        const sqlInsertUser = "INSERT INTO users (email, username, password) VALUES (?, ?, ?)";
+        const values = [email, username, hashedPassword];
+
+        db.query(sqlInsertUser, values, (err, result) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    if (err.sqlMessage.includes('email')) {
+                        return res.json({ message: 'This email already exists' });
+                    } else if (err.sqlMessage.includes('username')) {
+                        return res.json({ message: 'This username already exists' });
+                    }
+                } else {
+                    console.error('Error inserting user:', err);
+                    return res.json({ message: 'User addition failed' });
+                }
+            } else {
+                console.log('User added successfully:', result);
+                return res.status(201).json({ message: 'User added successfully' });
+            }
+        });
+    });
+});
 
 
 
