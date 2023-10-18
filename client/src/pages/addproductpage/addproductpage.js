@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import '../../styles/addproductpage/addproductpage.css';
 import AddedProducts from '../../components/addedproducts/addedproducts';
-import { Link } from 'react-router-dom';
+import LogoutBtn from '../../components/logout/logoutbtn';
 
 function AddProductPage() {
     const [productName, setProductName] = useState('');
@@ -53,8 +53,7 @@ function AddProductPage() {
     return (
         <div className='addProductPage'>
             <h2>Add Products</h2>
-            <button><Link to="/logout">Logout</Link></button>
-
+            <LogoutBtn />
             <div className='Form'>
                 <label>Product Name</label>
                 <input type='text' name='productName' onChange={(e) => { setProductName(e.target.value) }} />

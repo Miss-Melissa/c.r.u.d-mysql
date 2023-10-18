@@ -1,33 +1,68 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import Axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const [loginUsername, setLoginUsername] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [loginStatus, setLoginStatus] = useState('');
+    const [statusHolder, setStatusHolder] = useState('message');
+    const navigateTo = useNavigate();
+
+    const handleLogin = () => {
+        Axios.post('http://localhost:3001/api/login', {
+            loginUsername: loginUsername,
+            loginPassword: loginPassword,
+        })
+            .then((response) => {
+                console.log(response.data.message);
+                if (response.data.message === 'User not found' || loginUsername === '' || loginPassword === '') {
+                    console.log(response.data.message);
+                    setLoginStatus(`Wrong username ore password`);
+                } else if (response.data.message === 'Login successful') {
+                    navigateTo('/add-product');
+                }
+            })
+            .catch((error) => {
+                console.error('Error logging in:', error.message);
+            });
+    };
+
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        handleLogin();
+        setLoginUsername();
+    };
+
+    useEffect(() => {
+        if (loginStatus !== '') {
+            setStatusHolder('showMessage');
+            setTimeout(() => {
+                setStatusHolder('message');
+                setLoginStatus('');
+            }, 3000);
+        }
+    }, [loginStatus]);
+
     return (
         <div>
             <h3>Login</h3>
             <div>
                 <div>
-                    <form>
-                        <span>Login status</span>
+                    <form onSubmit={handleFormSubmit}>
+                        <span className={statusHolder}>{loginStatus}</span>
                         <br />
                         <label>Username:</label>
-                        <input type='text' placeholder='Enter username' />
+                        <input type='text' placeholder='Enter username' onChange={(event) => { setLoginUsername(event.target.value) }} />
                         <br />
                         <label>Password:</label>
-                        <input type='text' placeholder='Enter password' />
+                        <input type='password' placeholder='Enter password' onChange={(event) => { setLoginPassword(event.target.value) }} />
                         <br />
                         <button type='submit'>
                             <span>Login</span>
                         </button>
                     </form>
                 </div>
-                <div>
-                    <span>Forget your password? <Link to="">Click here</Link></span>
-                </div>
-                <div><Link to="/add-product">Dashboard</Link></div>
-            </div>
-            <div>
-                <span>Don't have an account?</span> <Link to="/register"><button>Register</button></Link>
             </div>
         </div>
     );
